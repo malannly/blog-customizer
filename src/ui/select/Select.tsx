@@ -22,29 +22,29 @@ type SelectProps = {
 
 export const Select = (props: SelectProps) => {
 	const { options, placeholder, selected, onChange, onClose, title } = props;
-	const [isOpen, setIsOpen] = useState<boolean>(false);
+	const [isMenu, setIsMenuOpen] = useState<boolean>(false);
 	const rootRef = useRef<HTMLDivElement>(null);
 	const placeholderRef = useRef<HTMLDivElement>(null);
 	const optionClassName = selected?.optionClassName ?? '';
 
 	useOutsideClickClose({
-		isOpen,
+		isMenu,
 		rootRef,
 		onClose,
-		onChange: setIsOpen,
+		onChange: setIsMenuOpen,
 	});
 
 	useEnterSubmit({
 		placeholderRef,
-		onChange: setIsOpen,
+		onChange: setIsMenuOpen,
 	});
 
 	const handleOptionClick = (option: OptionType) => {
-		setIsOpen(false);
+		setIsMenuOpen(false);
 		onChange?.(option);
 	};
 	const handlePlaceHolderClick: MouseEventHandler<HTMLDivElement> = () => {
-		setIsOpen((isOpen) => !isOpen);
+		setIsMenuOpen((isMenu) => !isMenu);
 	};
 
 	return (
@@ -59,7 +59,7 @@ export const Select = (props: SelectProps) => {
 			<div
 				className={styles.selectWrapper}
 				ref={rootRef}
-				data-is-active={isOpen}
+				data-is-active={isMenu}
 				data-testid='selectWrapper'>
 				<img src={arrowDown} alt='иконка стрелочки' className={styles.arrow} />
 				<div
@@ -82,7 +82,7 @@ export const Select = (props: SelectProps) => {
 						{selected?.title || placeholder}
 					</Text>
 				</div>
-				{isOpen && (
+				{isMenu && (
 					<ul className={styles.select} data-testid='selectDropdown'>
 						{options
 							.filter((option) => selected?.value !== option.value)
